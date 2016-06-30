@@ -21,6 +21,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @UniqueConstraint(columnNames = "NAME")})
 public class Radio implements Serializable{
 
+    static final String imgBasePath="http://10.0.0.2/rest/";
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "ID", unique = true, nullable = false)
@@ -129,5 +131,9 @@ public class Radio implements Serializable{
 
     public void setRadioGroup(RadioGroup radioGroup) {
         this.radioGroup = radioGroup;
+    }
+
+    public String getImgPath(){
+        return imgBasePath+"getRadioImg?radio_id="+id;
     }
 }

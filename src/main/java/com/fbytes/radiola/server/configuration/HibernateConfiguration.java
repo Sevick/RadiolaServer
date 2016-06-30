@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({ "com.fbytes.radiola.server.configuration" })
+@ComponentScan({ "com.fbytes.radiola.server.configuration" ,"com.fbytes.radiola.server.model"})
 @PropertySource(value = { "classpath:application.properties" })
 public class HibernateConfiguration {
 

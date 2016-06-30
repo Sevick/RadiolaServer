@@ -25,6 +25,10 @@ public class RadioGroupServicesImpl implements RadioGroupServices, InitializingB
     RadioGroupDAO radioGroupDAO;
 
 
+    public void updateRadioGroup(RadioGroup radioGroup) throws Exception {
+        radioGroupDAO.updateRadioGroup(radioGroup.getId(),radioGroup);
+    }
+
     public void addRadioGroup(RadioGroup radioGroup) throws Exception {
         radioGroupDAO.addRadioGroup(radioGroup);
     }

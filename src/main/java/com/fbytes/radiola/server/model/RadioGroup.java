@@ -3,7 +3,12 @@ package com.fbytes.radiola.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,7 +26,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "RADIOGROUP", uniqueConstraints = {
 @UniqueConstraint(columnNames = "NAME")})
+@PropertySource(value = { "classpath:application.properties" })
 public class RadioGroup implements Serializable{
+
+    static final String imgBasePath="http://10.0.0.2/rest/";
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -29,13 +37,6 @@ public class RadioGroup implements Serializable{
     private Integer id;
     private String name;
     private Integer version=0;
-
-/*
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name="GROUP_ID", referencedColumnName="ID")
-    @ElementCollection(targetClass=Radio.class)
-*/
-
 
     //@JsonIgnore
     @OneToMany(targetEntity=Radio.class,mappedBy = "radioGroup",fetch = FetchType.EAGER,cascade = CascadeType.ALL) //fetch = FetchType.EAGER,
@@ -102,5 +103,12 @@ public class RadioGroup implements Serializable{
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+
+    //-------------------------------------------------------------
+
+    public String getImgPath(){
+        return imgBasePath+"getRadioGroupImg?radioGroup_id="+id;
     }
 }

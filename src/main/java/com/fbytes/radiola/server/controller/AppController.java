@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.fbytes.radiola.server.model.RadioGroup;
+import com.fbytes.radiola.server.service.RadioGroupServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,9 @@ public class AppController {
 
 	@Autowired
 	EmployeeService service;
+
+	@Autowired
+	RadioGroupServices radioGroupServices;
 	
 	@Autowired
 	MessageSource messageSource;
@@ -71,6 +76,82 @@ public class AppController {
 //		return "allemployees";
 	}
 
+	@RequestMapping(value = {"/listGroups" }, method = RequestMethod.GET)
+	public String listRadioGroups(ModelMap model) {
+
+		try {
+			List<RadioGroup> radioGroups = radioGroupServices.getRadioGroupList();
+			model.addAttribute("radiogroups", radioGroups);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "allgroups";
+	}
+
+
+	@RequestMapping(value = { "/newGroup" }, method = RequestMethod.GET)
+	public String newRadrioGroup(ModelMap model) {
+		RadioGroup radioGroup = new RadioGroup();
+		model.addAttribute("radiogroup", radioGroup);
+		model.addAttribute("edit", false);
+		return "newgroup";
+	}
+
+
+	@RequestMapping(value = { "/groupedit-{id}-radiogroup" }, method = RequestMethod.GET)
+	public String editRadioGroup(@PathVariable String id, ModelMap model) {
+		RadioGroup radioGroup = null;
+		try {
+			radioGroup = radioGroupServices.getRadioGroupById(Integer.valueOf(id));
+			model.addAttribute("radiogroup", radioGroup);
+			model.addAttribute("edit", true);
+			return "newgroup";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("failed", "RadioGroup " + radioGroup.getName()	+ " updated successfully");
+			return "failed";
+		}
+	}
+
+	/*
+	 * This method will be called on form submission, handling POST request for
+	 * updating employee in database. It also validates the user input
+	 */
+	@RequestMapping(value = { "/edit-{id}-radioGroup" }, method = RequestMethod.POST)
+	public String updateRadioGroup(@Valid RadioGroup radioGroup, BindingResult result,
+								 ModelMap model, @PathVariable String id) {
+
+		if (result.hasErrors()) {
+			return "newgroup";
+		}
+
+		/*
+		if(!service.isEmployeeSsnUnique(employee.getId(), employee.getSsn())){
+			FieldError ssnError =new FieldError("employee","ssn",messageSource.getMessage("non.unique.ssn", new String[]{employee.getSsn()}, Locale.getDefault()));
+			result.addError(ssnError);
+			return "registration";
+		}
+		*/
+
+		try {
+			radioGroupServices.updateRadioGroup(radioGroup);
+			model.addAttribute("success", "RadioGroup " + radioGroup.getName()	+ " updated successfully");
+			return "success";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("failed", "RadioGroup " + radioGroup.getName()	+ " cant be updated");
+			return "failed";
+
+		}
+
+	}
+
+
+
+
+	//------------------------------------------------------
 
 
 

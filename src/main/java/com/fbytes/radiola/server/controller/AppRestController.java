@@ -17,6 +17,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rest")
@@ -71,7 +72,7 @@ public class AppRestController {
 	}
 
 
-/*
+
     @RequestMapping("/getRadioGroupList")
     public RadioGroupList getRadioGroupList() {
         List<RadioGroup> radioGroups = null;
@@ -86,7 +87,28 @@ public class AppRestController {
         }
         return tmpGroupList;
     }
+
+
+/*
+    @RequestMapping("/getRadioGroupList")
+    public List<RadioGroup> getRadioGroupList() {
+        List<RadioGroup> radioGroups = null;
+        try {
+            System.out.println("!!! getting list");
+            radioGroups = radioGroupServices.getRadioGroupList();
+
+            System.out.println("!!! got list with "+radioGroups.size()+ "groups");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return radioGroups;
+    }
 */
+
+
+
 
     @RequestMapping("/getRadioGroupByKey")
     public RadioGroup getRadioGroupByKey(@RequestParam(value="radiogroup_id", defaultValue="1") Integer radioGroupId) {
@@ -103,21 +125,7 @@ public class AppRestController {
 
 
 
-    @RequestMapping("/getRadioGroupList")
-    public List<RadioGroup> getRadioGroupList() {
-        List<RadioGroup> radioGroups = null;
-        try {
-            System.out.println("!!! getting list");
-            radioGroups = radioGroupServices.getRadioGroupList();
 
-            System.out.println("!!! got list with "+radioGroups.size()+ "groups");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return radioGroups;
-    }
 
 
 	@RequestMapping(value="/getRadioImg", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -143,11 +151,11 @@ public class AppRestController {
     public void getRadioGroupImg(@RequestParam(value="radioGroup_id", defaultValue="1") Integer radioGroupId, HttpServletResponse response) {
         response.setContentType("image/jpeg");
 
-        Blob radioImgBlob = null;
+        Blob imgBlob = null;
         byte[] radioImgBin;
         try {
-            radioImgBlob = radioServices.getRadioImg(radioGroupId);
-            response.getOutputStream().write(radioImgBlob.getBytes(1,(int) radioImgBlob.length()));
+            imgBlob = radioGroupServices.getRadioGroupImg(radioGroupId);
+            response.getOutputStream().write(imgBlob.getBytes(1,(int) imgBlob.length()));
             //radioImgBlob.getBinaryStream().read(radioImgBin);
             //Base64.encode(radioImgBin);
         } catch (SQLException e) {

@@ -12,7 +12,7 @@ public class RadioGroupList implements Serializable{
 
     protected String name;
     protected Integer listVersion;
-    protected Set<RadioGroup> itemList;
+    protected List<RadioGroup> itemList;
 
     public RadioGroupList() {
     }
@@ -37,11 +37,11 @@ public class RadioGroupList implements Serializable{
         this.listVersion = listVersion;
     }
 
-    public Set<RadioGroup> getItemList() {
+    public List<RadioGroup> getItemList() {
         return itemList;
     }
 
-    public void setItemList(Set<RadioGroup> itemList) {
+    public void setItemList(List<RadioGroup> itemList) {
         this.itemList = itemList;
     }
 }
